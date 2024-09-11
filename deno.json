@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "strict": true
+  },
+  "lock": false,
+  "tasks": {
+    "format": "deno fmt -q src/",
+    "check-ts": "deno check src/webserver.ts",
+    "check-lint": "deno lint src/",
+    "check-format": "deno fmt --check -q src/"
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ]
+    }
+  },
+  "fmt": {
+    "options": {
+      "useTabs": false,
+      "lineWidth": 80,
+      "indentWidth": 2,
+      "singleQuote": true
+    }
+  }
+}
