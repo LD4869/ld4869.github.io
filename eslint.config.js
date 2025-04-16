@@ -26,8 +26,8 @@ export default defineConfig([
     plugins:{vue: pluginVue },
     rules:{
       /** @see https://eslint.vuejs.org/rules/component-api-style.html */ 
-      "vue/component-api-style": ["error", ["script-setup"]], 
-
+      "vue/component-api-style": ["error", ["script-setup"]]
+"vue/multi-word-component-names": "off",
     }
   },
   {
