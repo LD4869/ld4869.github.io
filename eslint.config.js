@@ -1,0 +1,45 @@
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginVue from "eslint-plugin-vue";
+import json from "@eslint/json";
+import markdown from "@eslint/markdown";
+import { defineConfig } from "eslint/config";
+
+export default defineConfig([
+ 
+  {
+    files: ["**/*.{js,mjs,cjs,ts,vue}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,vue}"],
+    languageOptions: { globals: globals.browser },
+  },
+  tseslint.configs.recommended,
+  pluginVue.configs["flat/essential"],
+  {
+    files: ["**/*.vue"],
+    ignores:["**/*.json"],
+    languageOptions: { parserOptions: { parser: tseslint.parser } },
+    plugins:{vue: pluginVue },
+    rules:{
+      /** @see https://eslint.vuejs.org/rules/component-api-style.html */ 
+      "vue/component-api-style": ["error", ["script-setup"]], 
+
+    }
+  },
+  {
+    files: ["**/*.json"],
+    plugins: { json },
+    language: "json/json",
+    extends: ["json/recommended"],
+  },
+  {
+    files: ["**/*.md"],
+    plugins: { markdown },
+    language: "markdown/gfm",
+    extends: ["markdown/recommended"],
+  },
+]);
