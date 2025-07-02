@@ -61,3 +61,53 @@ export function parseDate(date?: Date) {
     timezoneOffset: timezoneOffset / 60,
   };
 }
+
+/**
+ * 格式化日期时间
+ *
+ * @param params 格式化参数
+ * @param params.inputDate 要格式化的日期对象，默认为当前时间
+ * @param params.separator 自定义分隔符，用于日期和时间部分
+ *
+ * @returns 返回包含三种格式的对象:
+ * - formatFull: 完整日期时间格式 (默认格式 "YYYY-MM-DD HH:mm:ss")
+ * - formatDate: 仅日期部分 (格式 "YYYY-MM-DD")
+ * - formatTime: 仅时间部分 (格式 "HH:mm:ss")
+ *
+ * @example
+ * formatDate({ inputDate: new Date() }) // 返回当前时间的格式化对象
+ * formatDate({ separator: '/' }) // 使用'/'作为分隔符
+ */
+export function formatDate(params: {
+  /** 要格式化的日期对象   */
+  inputDate?: Date;
+  /** 自定义分隔符   */
+  separator?: string;
+}): {
+  fullDateFormat: string;
+  dateFormat: string;
+  timeFormat: string;
+} {
+  const { inputDate = new Date(), separator } = params;
+  const { year, month, day, hour, minute, second } = parseDate(inputDate);
+
+  const dateFormat = [
+    year,
+    month.toString().padStart(2, "0"),
+    day.toString().padStart(2, "0"),
+  ].join(separator ?? "-");
+  const timeFormat = [
+    hour.toString().padStart(2, "0"),
+    minute.toString().padStart(2, "0"),
+    second.toString().padStart(2, "0"),
+  ].join(separator ?? ":");
+
+  return {
+    fullDateFormat:
+      separator !== undefined
+        ? [dateFormat, timeFormat].join(separator)
+        : `${dateFormat} ${timeFormat}`,
+    dateFormat,
+    timeFormat,
+  };
+}
