@@ -1,0 +1,10 @@
+{
+  // 启用 Deno
+  "deno.enable": true,
+  // 启用 Deno 语言服务器
+  "deno.enablePaths": ["."],
+  // 启用测试代码透镜
+  "deno.codeLens.test": true,
+  // 其他 Deno 配置（可选）
+  "deno.config": "deno.json", // 如果你有 deno.json 配置文件
+}
