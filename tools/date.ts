@@ -63,20 +63,14 @@ export function parseDate(date?: Date) {
 }
 
 /**
- * 格式化日期时间
- *
+ * 格式化日期对象为指定格式的字符串
  * @param params 格式化参数
  * @param params.inputDate 要格式化的日期对象，默认为当前时间
- * @param params.separator 自定义分隔符，用于日期和时间部分
- *
- * @returns 返回包含三种格式的对象:
- * - formatFull: 完整日期时间格式 (默认格式 "YYYY-MM-DD HH:mm:ss")
- * - formatDate: 仅日期部分 (格式 "YYYY-MM-DD")
- * - formatTime: 仅时间部分 (格式 "HH:mm:ss")
- *
- * @example
- * formatDate({ inputDate: new Date() }) // 返回当前时间的格式化对象
- * formatDate({ separator: '/' }) // 使用'/'作为分隔符
+ * @param params.separator 自定义分隔符，未指定时返回ISO格式(YYYY-MM-DDTHH:mm:ss)
+ * @returns 包含三种格式的对象:
+ *          fullDateFormat - 完整日期时间格式
+ *          dateFormat - 仅日期部分
+ *          timeFormat - 仅时间部分
  */
 export function formatDate(params: {
   /** 要格式化的日期对象   */
@@ -101,12 +95,13 @@ export function formatDate(params: {
     minute.toString().padStart(2, "0"),
     second.toString().padStart(2, "0"),
   ].join(separator ?? ":");
+  console.log(`${dateFormat}T${timeFormat}`);
 
   return {
     fullDateFormat:
       separator !== undefined
         ? [dateFormat, timeFormat].join(separator)
-        : `${dateFormat} ${timeFormat}`,
+        : `${dateFormat}T${timeFormat}`,
     dateFormat,
     timeFormat,
   };
