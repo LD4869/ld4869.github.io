@@ -14,7 +14,8 @@ export const pgConfig: Parameters<typeof postgres>[1] = {
     application_name: 'z1-deno',
   },
   // 添加日志配置 - 适用于postgresjs v3.4.5
-  debug: (conn: any, query: any, params: any[]) => {
+  // deno-lint-ignore no-explicit-any
+  debug: (conn: number, query: string, params: any[]) => {
     console.log(`conn: ${conn}`);
     console.log(`SQL: ${query}`);
     if (params && params.length > 0) {
