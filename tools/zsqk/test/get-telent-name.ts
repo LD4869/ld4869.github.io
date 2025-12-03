@@ -4,6 +4,10 @@ Deno.test("get-client-name-todo-list", () => {
     if (client.state !== "valid") {
       continue;
     }
-    console.log(`- [ ] ${client.name}`);
+    console.log(
+      `- [ ] 在 \`${client.name}(${client.id})\` 账套中新增结构 ${client.dbURI
+        .split("/")
+        .pop()}`
+    );
   }
 });
