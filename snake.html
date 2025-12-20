@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<title>Snake Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Antic+Slab" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  </head>
+
+  <body>
+
+    <div id="score">0</div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+      <!-- 虚拟按键 -->
+    <div id="virtual-controls">
+      <button id="up-btn" class="control-btn">↑</button>
+      <div class="controls-row">
+        <button id="left-btn" class="control-btn">←</button>
+        <button id="down-btn" class="control-btn">↓</button>
+        <button id="right-btn" class="control-btn">→</button>
+      </div>
+    </div>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        touch-action: none; /* 禁用默认触摸行为 */
+      }
+
+      #gameCanvas {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90vw;
+        max-height: 90vh;
+      }
+
+      #score {
+        text-align: center;
+        font-size: 140px;
+        font-family: 'Antic Slab', serif;
+      }
+
+      /* 虚拟按键样式 */
+      #virtual-controls {
+        position: absolute;
+        top: calc(50% + 220px);
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+      }
+
+      .controls-row {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .control-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        background-color: rgba(76, 175, 80, 0.8);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: all 0.1s ease;
+      }
+
+      .control-btn:active {
+        background-color: rgba(69, 160, 73, 0.9);
+        transform: scale(0.95);
+      }
+
+      #up-btn {
+        margin-bottom: 15px;
+      }
+
+      /* 移动端适配 */
+      @media (max-width: 768px) {
+        #gameCanvas {
+          width: 95vw;
+          height: 95vw;
+          max-width: 400px;
+          max-height: 400px;
+        }
+        
+        #score {
+          font-size: 100px;
+        }
+        
+        #virtual-controls {
+          top: auto;
+          bottom: 20px;
+          transform: translateX(-50%);
+        }
+        
+        .control-btn {
+          width: 70px;
+          height: 70px;
+          font-size: 28px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        #score {
+          font-size: 80px;
+        }
+        
+        .control-btn {
+          width: 60px;
+          height: 60px;
+          font-size: 24px;
+        }
+      }
+    </style>
+  </body>
+
+  <script>
+    const GAME_SPEED = 100;
+    const CANVAS_BORDER_COLOUR = 'black';
+    const CANVAS_BACKGROUND_COLOUR = "white";
+    const SNAKE_COLOUR = 'lightgreen';
+    const SNAKE_BORDER_COLOUR = 'darkgreen';
+    const FOOD_COLOUR = 'red';
+    const FOOD_BORDER_COLOUR = 'darkred';
+
+  
+
+    // 贪吃蛇
+    let snake = [{x: 150, y: 150}];
+    // 得分
+    let score = 0;
+    // 方向改变 - 当设置为 true 时，贪吃蛇的方向将在下次移动时改变
+    let changingDirection = false;
+
+    // 食物 x 坐标
+    let foodX;
+    // 食物 y 坐标
+    let foodY;
+ 
+    // 水平速度
+    let dx = 10;
+    // 垂直速度
+    let dy = 0;
+
+  
+    // 获取画布元素
+    const gameCanvas = document.getElementById("gameCanvas");
+    // 获取二维绘图上下文
+    const ctx = gameCanvas.getContext("2d");
+
+    // 响应式调整画布大小
+    function resizeCanvas() {
+      const maxWidth = Math.min(window.innerWidth * 0.95, 400);
+      const maxHeight = Math.min(window.innerHeight * 0.7, 400);
+      const size = Math.min(maxWidth, maxHeight);
+      
+      gameCanvas.width = size;
+      gameCanvas.height = size;
+    }
+
+    // 页面加载和窗口大小改变时调整画布
+    window.addEventListener('load', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas);
+
+   
+    // 开始游戏
+    main();
+    // 创建第一个食物位置
+    createFood();
+    // 调用 changeDirection(), 当用户按下任意键时改变贪吃蛇的方向
+    document.addEventListener("keydown", changeDirection);
+
+    // 添加虚拟按键事件监听器
+    document.getElementById("up-btn").addEventListener("click", function() {
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 38 }); // UP_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("down-btn").addEventListener("click", function() {
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 40 }); // DOWN_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("left-btn").addEventListener("click", function() {
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 37 }); // LEFT_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("right-btn").addEventListener("click", function() {
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 39 }); // RIGHT_KEY
+      }else{
+        reset();
+      }
+    });
+
+    // 添加触摸支持
+    document.getElementById("up-btn").addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 38 }); // UP_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("down-btn").addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 40 }); // DOWN_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("left-btn").addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 37 }); // LEFT_KEY
+      }else{
+        reset();
+      }
+    });
+    
+    document.getElementById("right-btn").addEventListener("touchstart", function(e) {
+      e.preventDefault();
+      if(!didGameEnd()){
+        changeDirection({ keyCode: 39 }); // RIGHT_KEY
+      }else{
+        reset();
+      }
+    });
+
+    /**
+     * 游戏主循环
+     * 重复调用以推进游戏
+     */
+    function main() {
+      // 如果游戏结束，提前返回以停止游戏
+      if (didGameEnd()) return;
+
+      // 等待 GAME_SPEED 毫秒后调用 onTick()
+      setTimeout(function onTick() {
+        changingDirection = false; // 重置方向改变标志
+        clearCanvas(); // 清除画布
+        drawFood(); // 绘制食物
+        advanceSnake(); // 推进贪吃蛇
+        drawSnake(); // 绘制贪吃蛇
+
+        // 递归调用 main() 以继续游戏循环
+        main();
+      }, 
+      // 确保游戏速度与浏览器刷新速度同步
+      GAME_SPEED)
+    }
+
+    /**
+     * 清除画布并绘制游戏边框
+     */
+    function clearCanvas() {
+      // 填充画布背景颜色
+      ctx.fillStyle = CANVAS_BACKGROUND_COLOUR;
+      // 设置边框颜色
+      ctx.strokestyle = CANVAS_BORDER_COLOUR;
+
+      // 填充画布背景颜色
+      ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+      // 绘制游戏边框
+      ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
+    }
+
+    /**
+     * 绘制食物
+     */
+    function drawFood() {
+      // 设置食物颜色
+      ctx.fillStyle = FOOD_COLOUR;
+      // 设置食物边框颜色
+      ctx.strokestyle = FOOD_BORDER_COLOUR;
+      // 绘制食物
+      ctx.fillRect(foodX, foodY, 10, 10);
+      ctx.strokeRect(foodX, foodY, 10, 10);
+    }
+
+    /**
+     * 根据水平速度改变蛇各部分的 x 坐标，根据垂直速度改变蛇各部分的 y 坐标，从而推动蛇移动
+     * Advances the snake by changing the x-coordinates of its parts
+     * according to the horizontal velocity and the y-coordinates of its parts
+     * according to the vertical veolocity
+     */
+    function advanceSnake() {
+      // 创建新的蛇头
+      const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+       
+      // 将新头添加到蛇体的开头
+      snake.unshift(head);
+
+      // 检查是否吃到了食物
+      const didEatFood = snake[0].x === foodX && snake[0].y === foodY;
+      if (didEatFood) {
+        // 增加得分
+        score += 10;
+        // 在屏幕上显示得分
+        document.getElementById('score').innerHTML = score;
+        // 生成新的食物位置
+        createFood();
+      } else {
+        // 移除蛇体的最后一部分
+        snake.pop();
+      }
+    }
+
+    /**
+     * Returns true if the head of the snake touched another part of the game
+     * or any of the walls
+     * 如果贪吃蛇头与游戏其他部分或墙壁碰撞，返回 true
+     */
+    function didGameEnd() {
+      for (let i = 4; i < snake.length; i++) {
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true
+      }
+
+      const hitLeftWall = snake[0].x < 0; 
+      const hitRightWall = snake[0].x > gameCanvas.width - 10;
+      const hitToptWall = snake[0].y < 0;
+      const hitBottomWall = snake[0].y > gameCanvas.height - 10;
+
+      return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
+    }
+
+    /**
+     * Generates a random number that is a multiple of 10 given a minumum
+     * and a maximum number
+     * 生成一个在 min 和 max 之间的随机数，该随机数是 10 的倍数
+     * 
+     * @param { number } min - 最小值（包含）
+     * @param { number } max - 最大值（包含）
+     */
+    function randomTen(min, max) {
+      return Math.round((Math.random() * (max-min) + min) / 10) * 10;
+    }
+
+    /**
+     * Creates random set of coordinates for the snake food.
+     * 为贪吃蛇食物生成随机的坐标
+     */
+    function createFood() {
+      // Generate a random number the food x-coordinate
+      // 生成一个在 0 和 gameCanvas.width - 10 之间的随机数，该随机数是 10 的倍数
+      foodX = randomTen(0, gameCanvas.width - 10);
+      // Generate a random number for the food y-coordinate
+      // 生成一个在 0 和 gameCanvas.height - 10 之间的随机数，该随机数是 10 的倍数
+      foodY = randomTen(0, gameCanvas.height - 10);
+
+      // if the new food location is where the snake currently is, generate a new food location
+      // 如果新的食物位置与贪吃蛇当前位置重叠，重新生成食物位置
+      snake.forEach(function isFoodOnSnake(part) {
+        const foodIsoNsnake = part.x == foodX && part.y == foodY;
+        if (foodIsoNsnake) createFood();
+      });
+    }
+
+    /**
+     * 绘制贪吃蛇
+     */
+    function drawSnake() {
+      // 循环遍历贪吃蛇的每一部分，绘制在画布上
+      snake.forEach(drawSnakePart)
+    }
+
+    /**
+     * 绘制贪吃蛇的每一部分
+     * @param { object } snakePart - 贪吃蛇的每一部分的坐标
+     */
+    function drawSnakePart(snakePart) {
+      // Set the colour of the snake part
+      ctx.fillStyle = SNAKE_COLOUR;
+
+      // Set the border colour of the snake part
+      ctx.strokestyle = SNAKE_BORDER_COLOUR;
+
+      // Draw a "filled" rectangle to represent the snake part at the coordinates
+      // the part is located
+      ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
+
+      // Draw a border around the snake part
+      ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+    }
+
+    /**
+     * Changes the vertical and horizontal velocity of the snake according to the
+     * key that was pressed.
+     * The direction cannot be switched to the opposite direction, to prevent the snake
+     * from reversing
+     * For example if the the direction is 'right' it cannot become 'left'
+     * @param { object } event - The keydown event
+     */
+    function changeDirection(event) {
+      const LEFT_KEY = 37;
+      const RIGHT_KEY = 39;
+      const UP_KEY = 38;
+      const DOWN_KEY = 40;
+      /**
+       * Prevent the snake from reversing
+       * Example scenario:
+       * Snake is moving to the right. User presses down and immediately left
+       * and the snake immediately changes direction without taking a step down first
+       */
+      if (changingDirection) return;
+      changingDirection = true;
+
+      const keyPressed = event.keyCode;
+
+      const goingUp = dy === -10;
+      const goingDown = dy === 10;
+      const goingRight = dx === 10;
+      const goingLeft = dx === -10;
+
+      if (keyPressed === LEFT_KEY && !goingRight) {
+        dx = -10;
+        dy = 0;
+      }
+      if (keyPressed === UP_KEY && !goingDown) {
+        dx = 0;
+        dy = -10;
+      }
+      if (keyPressed === RIGHT_KEY && !goingLeft) {
+        dx = 10;
+        dy = 0;
+      }
+      if (keyPressed === DOWN_KEY && !goingUp) {
+        dx = 0;
+        dy = 10;
+      }
+    }
+
+    /** 重置游戏 */
+    function reset() {
+      // 重置贪吃蛇的位置和速度
+      snake = [{x: 150, y: 150}];
+      dx = 10;
+      dy = 0;
+      score = 0;
+      createFood();
+      // 重新开始游戏
+      main();
+    }
+  </script>
+</html>
