@@ -94,18 +94,24 @@ function updateFormatResult(dateObj, separator) {
 // 语法高亮函数
 function highlightCode(code) {
     return code
-        .replace(/\b(function|const|let|var|return|if|else|for|while|do|break|continue|switch|case|default|try|catch|finally|throw|new|typeof|instanceof|in|of|export|import|from|as|default|class|extends|super|static|public|private|protected|readonly|interface|type|enum|namespace|module|declare|abstract|implements)\b/g, '<span class="keyword">$1</span>')
+        //.replace(/\b(function|const|let|var|return|if|else|for|while|do|break|continue|switch|case|default|try|catch|finally|throw|new|typeof|instanceof|in|of|export|import|from|as|default|class|extends|super|static|public|private|protected|readonly|interface|type|enum|namespace|module|declare|abstract|implements)\b/g, '<span class="keyword">$1</span>')
+        //.replace(/\b(number|string|boolean|void|any|unknown|never|object|Date)\b/g, '<span class="type">$1</span>')
         .replace(/(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g, '<span class="string">$&</span>')
         .replace(/\b(\d+)\b/g, '<span class="number">$1</span>')
         .replace(/\/\/.*$/gm, '<span class="comment">$&</span>')
         .replace(/\/\*[\s\S]*?\*\//g, '<span class="comment">$&</span>')
         .replace(/\b(parseDate|formatDate|Date|getTime|getFullYear|getMonth|getDate|getHours|getMinutes|getSeconds|getDay|getTimezoneOffset|toString|padStart|join|toLocaleString)\b/g, '<span class="function">$1</span>')
-        .replace(/\b(number|string|boolean|void|any|unknown|never|object|Date)\b/g, '<span class="type">$1</span>');
+        ;
 }
 
 // 显示源代码
 function displaySourceCode() {
-    const sourceCode = `function parseDate(date?: Date) {
+    const sourceCode = `/** 这里是文档注释
+ * 这是一个日期解析函数
+ */
+function parseDate(date?: Date) {
+    // 单行注释
+    /* 块注释 */
     console.log('Hello')
 }`;
 

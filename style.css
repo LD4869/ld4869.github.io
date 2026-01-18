@@ -200,16 +200,30 @@ body {
     background: #5a67d8;
 }
 
+/* 核心修复：pre 标签样式（解决首行解析） */
+pre {
+  margin: 0; /* 清除默认margin，避免首行偏移 */
+  padding: 20px;
+  white-space: pre; /* 严格保留换行，但显式声明 */
+  word-break: keep-all; /* 禁止单词内断行，避免首行字符被拆分 */
+  unicode-bidi: embed; /* 修复特殊字符解析 */
+}
+
 #codeDisplay {
-    padding: 20px;
-    margin: 0;
-    color: #d4d4d4;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-    font-size: 13px;
-    line-height: 1.5;
-    overflow-x: auto;
-    white-space: pre;
-    background: #1e1e1e;
+  padding: 15px;
+  margin: 0px;
+  color: #d4d4d4 !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre; 
+  overflow-x: auto;
+  overflow-y: visible;
+  height: auto;
+  min-height: 80px;
+  box-sizing: border-box;
+  /* 字符之间的间距，避免重叠 */
+  letter-spacing: 0; 
 }
 
 /* 语法高亮 */
