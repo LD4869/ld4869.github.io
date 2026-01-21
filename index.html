@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- 声明文档类型, 制定语言为中文 -->
+<html lang="zh-CN">
+  <!-- 头部: 配置元信息, 字体, 样式引入 -->
+  <head>
+    <!-- 字符编码, 为了支持中文 -->
+    <meta charset="UTF-8" />
+    <!-- 视口元标签, 为了响应式设计 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 标题, 显示在浏览器标签页上 -->
+    <title>Holden Blog</title>
+    <!-- 预留字体加载、CSS引入位置 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <style>
+      * {
+        margin: 0; /* 移除默认外边距 */
+        padding: 0; /* 移除默认内边距 */
+        box-sizing: border-box; /* 包含内边距和边框在宽度计算内 */
+      }
+      body {
+        font-family: "Maple Mono", SF Mono, Monaco, monospace;
+        background-color: #f8f6f2; /* 项目指定页面底色 */
+        color: #363532; /* 基础文字色 黑金色 */
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 头部: 固定定位, 贴合Github风格 -->
+    <header class="header" id="siteHeader">
+      <div class="header-container">
+        <!-- 预留顶栏内容: 标题/汉堡菜单按钮 -->
+        <h1 class="site-title">Holden</h1>
+        <button class="hamburger-btn" id="hamburgerBtn" hidden>...</button>
+      </div>
+    </header>
+    <div class="main-container">
+      <!-- 侧边栏: 固定定位, 移动端折叠 -->
+      <aside class="sidebar" id="siteSidebar">
+        <nav class="sidebar-nav">
+          <!-- 预留侧边栏导航占位 -->
+          <ul class="nav-list">
+            <li class="nav-item"><a href="#home">首页</a></li>
+            <li class="nav-item"><a href="#knowledge">知识库</a></li>
+            <li class="nav-item"><a href="leetcode">算法练习</a></li>
+            <li class="nav-item"><a href="tools">工具集</a></li>
+          </ul>
+        </nav>
+      </aside>
+      <!-- 主要内容区域: 自适应宽度 -->
+      <main class="content" id="siteContent">
+        <!-- 预留主要内容占位 -->
+        <section class="content-section">
+          <h2>Welcome to Holden's Blog</h2>
+          <p>日拱一卒，功不唐捐。</p>
+        </section>
+      </main>
+    </div>
+    <!-- 预留JS引入位置, 适配Deno/原生JS -->
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
