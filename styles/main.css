@@ -1,0 +1,131 @@
+.header {
+  position: fixed; /* 固定定位, 顶部对齐 */
+  top: 0; /* 顶部对齐 */
+  left: 0; /* 左侧对齐 */
+  right: 0; /* 右侧对齐 */
+  height: 56px; /* 固定高度 */
+  background-color: #f0eee8; /* 背景颜色 */
+  border-bottom: 1px solid #e0ded8; /* 下边框 */
+  z-index: 100; /* 较高的层级, 确保在其他内容之上 */
+  padding: 0 16px; /* 内边距, 左右16px */
+}
+
+.header-container {
+  max-width: 100%; /* 最大宽度, 100% */
+  height: 100%; /* 高度, 100% */
+  display: flex; /* 弹性布局 */
+  align-items: center; /* 垂直居中对齐 */
+  justify-content: space-between; /* 水平方向, 两端对齐 */
+}
+
+.site-title {
+  font-size: 18px; /* 字体大小 */
+  font-weight: 1000 bolder; /* 加粗 */
+  color: #363532;
+}
+
+/* 汉堡菜单按钮：仅在移动端显示 */
+.hamburger-btn {
+  border: none; /* 无边框 */
+  background: transparent; /* 透明背景 */
+  font-size: 20px;
+  color: #807976;
+  cursor: pointer; /* 鼠标指针样式 */
+  padding: 8px;
+  border-radius: 4px; /* 圆角 */
+}
+
+/* 汉堡菜单按钮：(hover-悬停) */
+.hamburger-btn:hover {
+  background-color: #e8e6e0; /* hover仅加深10%，符合规范 */
+}
+/* 主容器：适配顶栏高度, 弹性布局 */
+.main-container {
+  display: flex; /* 弹性布局 */
+  margin-top: 56px; /* 顶部外边距, 与header高度相同 */
+  min-height: calc(100vh - 56px); /* 最小高度, 100vh-56px */
+}
+
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background-color: #f0eee8;
+  border-right: 1px solid #e0ded8; /* 右边框 */
+  padding: 12px 24px;
+  height: calc(100vh - 56px);
+  position: sticky; /* 粘性定位, 适配顶栏高度 */
+  top: 56px; /* 适配顶栏高度 */
+  overflow-y: auto; /* 垂直方向, 自动滚动 */
+}
+
+.nav-list {
+  list-style-type: none; /* 无序列表项标记 */
+}
+
+.nav-item {
+  margin-bottom: 0; /* 底部外边距, 与下一个nav-item分隔 */
+}
+
+.nav-item a {
+  display: block; /* 块级元素, 占满宽度 */
+  padding: 8px 12px; /* 内边距, 上下8px, 左右12px */
+  color: #363532;
+  text-decoration: none; /* 无下划线 */
+  border-radius: 4px; /* 圆角 */
+}
+
+.nav-item a:hover {
+  background-color: #e8e6e0; /* hover仅加深10%，符合规范 */
+}
+
+.nav-item a:active {
+  background-color: #b8dbcd33; /* 选中态低透明度 */
+}
+
+/* 主内容区样式：自适应宽度，舒适内边距 */
+.content {
+  flex: 1;
+  padding: 24px 32px;
+  max-width: calc(100% - 240px);
+}
+
+.content-section {
+  margin-bottom: 32px;
+  line-height: 1.6; /* 舒适行间距 */
+}
+
+.content-section h2 {
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: #363532;
+}
+
+.content-section p {
+  font-size: 16px;
+  color: #585754;
+}
+
+/* 移动端适配：视口宽度<768px时生效 */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -240px; /* 默认隐藏 */
+    transition: left 0.2s ease;
+    z-index: 90;
+    height: 100vh;
+    margin-top: 56px;
+  }
+
+  .sidebar.show {
+    left: 0; /* 展开时显示 */
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 16px 20px;
+  }
+}
