@@ -1,3 +1,24 @@
+body {
+  /* 优先加载Maple Mono，配置完整回退规则 */
+  font-family:
+    "Maple Mono",
+    SF Mono,
+    Monaco,
+    monospace;
+  background-color: #f8f6f2; /* 项目指定页面底色 */
+  color: #363532; /* 基础文字色 黑金色 */
+  /* 确保字体渲染清晰 */
+  -webkit-font-smoothing: antialiased; /* 抗锯齿渲染 */
+  -moz-osx-font-smoothing: grayscale; /* 抗锯齿渲染 */
+}
+
+* {
+  margin: 0; /* 移除默认外边距 */
+  padding: 0; /* 移除默认内边距 */
+  box-sizing: border-box; /* 包含内边距和边框在宽度计算内 */
+  font-family: inherit; /* 继承父元素字体 */
+}
+
 .header {
   position: fixed; /* 固定定位, 顶部对齐 */
   top: 0; /* 顶部对齐 */
@@ -19,8 +40,8 @@
 }
 
 .site-title {
-  font-size: 18px; /* 字体大小 */
-  font-weight: 1000 bolder; /* 加粗 */
+  font-size: 36px; /* 字体大小 */
+  font-weight: bolder; /* 加粗 */
   color: #363532;
 }
 

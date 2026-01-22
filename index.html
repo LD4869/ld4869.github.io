@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!-- 声明文档类型, 制定语言为中文 -->
 <html lang="zh-CN">
   <!-- 头部: 配置元信息, 字体, 样式引入 -->
@@ -10,27 +10,27 @@
     <!-- 标题, 显示在浏览器标签页上 -->
     <title>Holden Blog</title>
     <!-- 预留字体加载、CSS引入位置 -->
+    <!-- 加载Maple Mono字体（开源CDN） -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fontsource/maple-mono@5.2.6/index.min.css"
+      rel="stylesheet"
+    />
+    <!-- 备用加载方案（防止主CDN失效） -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@fontsource/maple-mono@5.0.12/index.min.css"
+      media="print"
+      onload="this.media = 'all'"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="stylesheet" href="./styles/main.css" />
-    <style>
-      * {
-        margin: 0; /* 移除默认外边距 */
-        padding: 0; /* 移除默认内边距 */
-        box-sizing: border-box; /* 包含内边距和边框在宽度计算内 */
-      }
-      body {
-        font-family: "Maple Mono", SF Mono, Monaco, monospace;
-        background-color: #f8f6f2; /* 项目指定页面底色 */
-        color: #363532; /* 基础文字色 黑金色 */
-      }
-    </style>
   </head>
   <body>
     <!-- 头部: 固定定位, 贴合Github风格 -->
     <header class="header" id="siteHeader">
       <div class="header-container">
         <!-- 预留顶栏内容: 标题/汉堡菜单按钮 -->
-        <h1 class="site-title">Holden</h1>
+        <h1 class="site-title">Holden Blog</h1>
         <button class="hamburger-btn" id="hamburgerBtn" hidden="true">
           ...
         </button>
