@@ -31,8 +31,16 @@
       <div class="header-container">
         <!-- 预留顶栏内容: 标题/汉堡菜单按钮 -->
         <h1 class="site-title">Holden Blog</h1>
-        <button class="hamburger-btn" id="hamburgerBtn" hidden="true">
-          ...
+        <!-- 
+          汉堡菜单按钮：仅在移动端显示
+          aria-label="切换侧边栏导航"
+        -->
+        <button
+          class="hamburger-btn"
+          id="hamburgerBtn"
+          aria-label="切换侧边栏导航"
+        >
+          ☰
         </button>
       </div>
     </header>
@@ -58,7 +66,7 @@
         </section>
       </main>
     </div>
-    <!-- 预留JS引入位置, 适配Deno/原生JS -->
-    <!-- <script type="module" src="main.js"></script> -->
+    <!-- 预留TS引入位置, 适配Deno/原生JS -->
+    <script src="./dist/main.js" defer></script>
   </body>
 </html>

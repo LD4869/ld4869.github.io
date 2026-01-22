@@ -54,17 +54,12 @@ body {
   cursor: pointer; /* 鼠标指针样式 */
   padding: 8px;
   border-radius: 4px; /* 圆角 */
+  display: none; /* 默认隐藏(PC端) */
 }
 
 /* 汉堡菜单按钮：(hover-悬停) */
 .hamburger-btn:hover {
   background-color: #e8e6e0; /* hover仅加深10%，符合规范 */
-}
-/* 主容器：适配顶栏高度, 弹性布局 */
-.main-container {
-  display: flex; /* 弹性布局 */
-  margin-top: 56px; /* 顶部外边距, 与header高度相同 */
-  min-height: calc(100vh - 56px); /* 最小高度, 100vh-56px */
 }
 
 .sidebar {
@@ -103,6 +98,38 @@ body {
   background-color: #b8dbcd33; /* 选中态低透明度 */
 }
 
+/* 移动端适配：视口宽度<768px时生效 */
+@media (max-width: 768px) {
+  .hamburger-btn {
+    display: block; /* 移动端显示 */
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -240px; /* 默认隐藏 */
+    transition: left 0.2s ease;
+    z-index: 90;
+    height: calc(100vh - 56px);
+    /* margin-top: 56px; 导致上方空出56px的高度, 与header高度相同 */
+  }
+
+  .sidebar.show {
+    left: 0; /* 展开时显示 */
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 16px 20px;
+  }
+}
+
+/* 主容器：适配顶栏高度, 弹性布局 */
+.main-container {
+  display: flex; /* 弹性布局 */
+  margin-top: 56px; /* 顶部外边距, 与header高度相同 */
+  min-height: calc(100vh - 56px); /* 最小高度, 100vh-56px */
+}
+
 /* 主内容区样式：自适应宽度，舒适内边距 */
 .content {
   flex: 1;
@@ -124,29 +151,4 @@ body {
 .content-section p {
   font-size: 16px;
   color: #585754;
-}
-
-/* 移动端适配：视口宽度<768px时生效 */
-@media (max-width: 768px) {
-  .hamburger-btn {
-    display: block;
-  }
-
-  .sidebar {
-    position: fixed;
-    left: -240px; /* 默认隐藏 */
-    transition: left 0.2s ease;
-    z-index: 90;
-    height: 100vh;
-    margin-top: 56px;
-  }
-
-  .sidebar.show {
-    left: 0; /* 展开时显示 */
-  }
-
-  .content {
-    max-width: 100%;
-    padding: 16px 20px;
-  }
 }

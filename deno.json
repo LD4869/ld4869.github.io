@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "types": ["deno-types"]  
+    "lib": ["esnext", "dom"],
+
+    "module": "esnext",
+    "strict": true,
+    "types": ["deno-types"]
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.13",
