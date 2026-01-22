@@ -132,9 +132,9 @@ body {
 
 /* 主内容区样式：自适应宽度，舒适内边距 */
 .content {
-  flex: 1;
+  flex: 1; /* 占满剩余宽度 */
   padding: 24px 32px;
-  max-width: calc(100% - 240px);
+  max-width: 100%;
 }
 
 .content-section {
