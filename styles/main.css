@@ -1,3 +1,19 @@
+.site-svg {
+  width: 20px;
+  height: 20px;
+  fill: #b8dbcd; /* 项目指定主点缀色 */
+  display: inline-block; /* 行内块元素 */
+  vertical-align: middle; /* 垂直居中对齐 */
+  margin-right: 10px;
+}
+
+/* 顶栏 SVG 略大 */
+.header .site-svg {
+  width: 30px;
+  height: 30px;
+  margin-right: 0;
+}
+
 body {
   /* 优先加载Maple Mono，配置完整回退规则 */
   font-family:

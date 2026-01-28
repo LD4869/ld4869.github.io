@@ -30,7 +30,18 @@
     <header class="header" id="siteHeader">
       <div class="header-container">
         <!-- 预留顶栏内容: 标题/汉堡菜单按钮 -->
-        <h1 class="site-title">Holden Blog</h1>
+        <h1 class="site-title">
+          <svg
+            class="site-svg"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 3L4 7v10l8 4 8-4V7l-8-4zm0 2.2L18 8v8l-6 3-6-3V8l6-2.8zm-4 7.8v2l3 1.5 3-1.5v-2l-3-1.5-3 1.5zm4-4v2l3 1.5V10l-3-1.5z"
+            />
+          </svg>
+          Holden Blog
+        </h1>
         <!-- 
           汉堡菜单按钮：仅在移动端显示
           aria-label="切换侧边栏导航"
@@ -50,10 +61,54 @@
         <nav class="sidebar-nav">
           <!-- 预留侧边栏导航占位 -->
           <ul class="nav-list">
-            <li class="nav-item"><a href="#home">首页</a></li>
-            <li class="nav-item"><a href="#knowledge">知识库</a></li>
-            <li class="nav-item"><a href="#leetcode">算法练习</a></li>
-            <li class="nav-item"><a href="#tools">工具集</a></li>
+            <li class="nav-item">
+              <a href="#home"
+                ><svg
+                  class="site-svg"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" /></svg
+                >首页</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#knowledge"
+                ><svg
+                  class="site-svg"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"
+                  /></svg
+                >知识库</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#leetcode"
+                ><svg
+                  class="site-svg"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M18 4H6v2l6.5 6L6 18v2h12v-3h-7l5-5-5-5h7V4z" /></svg
+                >算法练习</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="#tools"
+                ><svg
+                  class="site-svg"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.39-1.08-.7-1.66-.94l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.58.24-1.14.55-1.66.94l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.39 1.08.7 1.66.94l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.58-.24 1.14-.55 1.66-.94l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"
+                  /></svg
+                >工具集</a
+              >
+            </li>
           </ul>
         </nav>
       </aside>
