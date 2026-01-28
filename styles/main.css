@@ -11,7 +11,7 @@
 .header .site-svg {
   width: 30px;
   height: 30px;
-  margin-right: 0;
+  margin-right: -18px;
 }
 
 body {
@@ -96,6 +96,7 @@ body {
 
 .nav-item {
   margin-bottom: 0; /* 底部外边距, 与下一个nav-item分隔 */
+  margin-left: -14px;
 }
 
 .nav-item a {
