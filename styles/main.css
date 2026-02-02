@@ -4,13 +4,13 @@
   fill: #b8dbcd; /* 项目指定主点缀色 */
   display: inline-block; /* 行内块元素 */
   vertical-align: middle; /* 垂直居中对齐 */
-  margin-right: 10px;
+  margin-right: 16px;
 }
 
 /* 顶栏 SVG 略大 */
 .header .site-svg {
-  width: 30px;
-  height: 30px;
+  width: 42px;
+  height: 42px;
   margin-right: -18px;
 }
 
@@ -96,7 +96,7 @@ body {
 
 .nav-item {
   margin-bottom: 0; /* 底部外边距, 与下一个nav-item分隔 */
-  margin-left: -14px;
+  margin-left: -8px;
 }
 
 .nav-item a {
@@ -137,6 +137,16 @@ body {
   .content {
     max-width: 100%;
     padding: 16px 20px;
+  }
+
+  /* 内容容器右移效果 */
+  .content.sidebar-open {
+    transform: translateX(240px); /* 向右移动侧边栏宽度 */
+    transition: transform 0.2s ease;
+  }
+
+  .content {
+    transition: transform 0.2s ease;
   }
 }
 
