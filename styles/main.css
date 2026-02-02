@@ -179,3 +179,22 @@ body {
   font-size: 16px;
   color: #585754;
 }
+
+code {
+  /* 代码块文字颜色, 土豪金 */
+  color: #f0d9b5;
+  /* 位置: 独立行 */
+  display: block;
+  /* 横向缩放时, 不换行, 保持代码块宽度 */
+  white-space: nowrap;
+  /* 宽度小于字符串长度时添加水平滚动条 */
+  overflow-x: auto;
+  /* 代码块宽度, 80个字符宽度 */
+  width: 80ch;
+  /* 上方添加macOS终端样式, 与代码块间距12px */
+  margin-top: 12px;
+  /* 终端样式 */
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: #222222;
+}
