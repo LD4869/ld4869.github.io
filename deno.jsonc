@@ -11,9 +11,8 @@
   },
   "tasks": {
     // 编译TS为JS
-    "build:js": "deno bundle --config deno.jsonc src/*.ts --outdir dist/", 
+    "build:js": "deno run --allow-read --allow-write --allow-run bundle.ts",
     // 本地开发启动（固定端口）
     "dev": "deno run --allow-net --allow-read --allow-sys https://deno.land/std/http/file_server.ts . --port 4507"
   }
 }
- 
