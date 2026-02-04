@@ -189,8 +189,8 @@ code {
   white-space: nowrap;
   /* 宽度小于字符串长度时添加水平滚动条 */
   overflow-x: auto;
-  /* 代码块宽度, 80个字符宽度 */
-  width: 80ch;
+  /* 代码块宽度, 自适应宽度，左右两侧与屏幕边缘的距离保持一致 */
+  width: 100%;
   /* 上方添加macOS终端样式, 与代码块间距12px */
   margin-top: 12px;
   /* 终端样式 */
