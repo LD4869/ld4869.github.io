@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "dom"],
+    // "target": "ESNext",
+    "module": "ESNext",
+    "strict": true
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.13", // deno标准库-断言
+    "@std/csv": "jsr:@std/csv@^1.0.6" // deno标准库-CSV
+  },
+  "tasks": {
+    // 编译TS为JS
+    "build:js": "deno bundle --config deno.jsonc src/*.ts --outdir dist/", 
+    // 本地开发启动（固定端口）
+    "dev": "deno run --allow-net --allow-read --allow-sys https://deno.land/std/http/file_server.ts . --port 4507"
+  }
+}
+ 
