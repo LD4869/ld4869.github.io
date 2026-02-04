@@ -1,0 +1,13 @@
+# Deno相关（本地缓存/编译临时文件）
+.deno/
+deno.lock
+# 节点模块（若后续新增npm依赖，提前过滤）
+node_modules/
+# 日志/临时文件
+*.log
+.DS_Store
+# 本地编辑器配置
+.vscode/
+.idea/
+# 仅保留dist（编译产物），过滤src编译中间文件（可选）
+# src/*.js
