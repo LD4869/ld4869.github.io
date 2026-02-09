@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <!-- 头部: 配置元信息, 字体, 样式引入 -->
+  <head>
+    <!-- 字符编码, 为了支持中文 -->
+    <meta charset="UTF-8" />
+    <!-- 视口元标签, 为了响应式设计 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 标题, 显示在浏览器标签页上 -->
+    <title>Holden Blog</title>
+    <!-- 预留字体加载、CSS引入位置 -->
+    <!-- 加载Maple Mono字体（开源CDN） -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fontsource/maple-mono@5.2.6/index.min.css"
+      rel="stylesheet"
+    />
+    <!-- 备用加载方案（防止主CDN失效） -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@fontsource/maple-mono@5.0.12/index.min.css"
+      media="print"
+      onload="this.media = 'all'"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body>
+    <h1>Reverse Demo</h1>
+    <p>Enter a string to reverse:</p>
+    <input type="text" id="inputString" />
+    <button onclick="reverseString()">Reverse</button>
+    <p id="result"></p>
+
+    <br />
+
+    <p>Example: "hello" -> "olleh"</p>
+    <code>
+      const s = "hello"; const reversed = s.split("").reverse().join("");
+      console.log(reversed); // Output: "olleh"
+    </code>
+    <p>
+      reverse() 将数组中的元素顺序反转, reverse() 是一个原地操作, 会修改原数组,
+      不返回新数组, 返回None
+    </p>
+
+    <script>
+      function reverseString() {
+        const inputString = document.getElementById("inputString").value;
+        const reversedString = inputString.split("").reverse().join("");
+        document.getElementById("result").textContent = reversedString;
+      }
+    </script>
+  </body>
+</html>
