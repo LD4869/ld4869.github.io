@@ -4,7 +4,13 @@ SELECT
 	wd.created_at,
 	wd.whse_prod_amount + wd.whse_item_amount - wd.account_amount -
 	lag(wd.whse_prod_amount + wd.whse_item_amount - wd.account_amount) 
-    OVER (ORDER BY id) as "本次变动值(库存-凭证)" 
+    OVER (ORDER BY id) as "本次变动值(库存-凭证)",
+	wd.whse_prod_amount - lag(wd.whse_prod_amount) 
+    OVER (ORDER BY id) as "标品变动值(库存)",
+	wd.whse_item_amount - lag(wd.whse_item_amount) 
+    OVER (ORDER BY id) as "非标品变动值(库存)",
+    wd.account_amount - lag(wd.account_amount) 
+    OVER (ORDER BY id) as "凭证变动值(凭证)"
 FROM
 	gy_warehouse_amount_diff AS wd
 ORDER BY
