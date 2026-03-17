@@ -16,7 +16,7 @@ export function playHumanVsAI(aiAgent: QLearningAgent) {
   while (!game.isGameOver()) {
     if (game.currentPlayer === Player.X) {
       // AI 走棋
-      const action = aiAgent.chooseAction(game);
+      const action = aiAgent.chooseAction(game, true);
       game.makeMove(action);
       console.log(`AI 走棋：${action}`);
     } else {
@@ -40,7 +40,4 @@ export function playHumanVsAI(aiAgent: QLearningAgent) {
   } else {
     console.log("平局!");
   }
-  // 打印 Q 表
-  console.log("\nAI 训练完成后的 Q 表:");
-  aiAgent.printQTable();
 }

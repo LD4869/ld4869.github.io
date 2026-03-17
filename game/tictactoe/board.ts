@@ -81,9 +81,7 @@ export class TicTacToe {
 
   printBoard(): void {
     const splitLine = "+----+----+----+";
-    console.log(
-      `(Step-${9 - this.getValidMoves().length})当前玩家: ${this.currentPlayer}`,
-    );
+    console.log(`当前玩家: ${this.currentPlayer}`);
 
     console.log(splitLine);
 

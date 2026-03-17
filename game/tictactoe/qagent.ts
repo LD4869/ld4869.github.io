@@ -12,7 +12,7 @@ export const DISCOUNT_FACTOR = 0.9;
 /** 探索率 */
 export const EXPLORATION_RATE = 0.2;
 /** 训练轮数 */
-export const TRAIN_EPISODES = 10;
+export const TRAIN_EPISODES = 500 * 1000;
 
 export class QLearningAgent {
   qTable: QTable;
@@ -38,17 +38,25 @@ export class QLearningAgent {
   /**
    * 选择当前状态下的最优动作
    * @param game 当前游戏状态
-   * @returns 最优动作的索引
+   * @returns 最优动作的索引(-1: 表示结束)
    * @description 基于当前状态和 Q 值选择最优动作
    *   1. 随机选择有效动作 (概率: 探索率)
    *   2. 选择 Q 值最高的有效动作
    */
-  chooseAction(game: TicTacToe): number {
+  chooseAction(game: TicTacToe, showQValue?: boolean): number {
     const validMoves = game.getValidMoves();
     const state = game.getStateKey();
     const qValues = this.getQValue(state, validMoves);
+    if (showQValue) {
+      console.log("AI thinking...");
 
-    if (Math.random() < EXPLORATION_RATE) {
+      console.log(state);
+      console.log(qValues);
+      console.log("AI thought...");
+    }
+    if (validMoves.length === 0) {
+      return -1;
+    } else if (Math.random() < EXPLORATION_RATE) {
       // 随机选择有效动作
       return validMoves[Math.floor(Math.random() * validMoves.length)];
     } else {
@@ -81,17 +89,13 @@ export class QLearningAgent {
     nextState: string,
     nextValidMoves: number[],
   ): void {
-    console.log("state:", state);
-    console.log("action:", action);
-    console.log("reward:", reward);
-    console.log("nextState:", nextState);
-    console.log("nextValidMoves:", nextValidMoves);
     /** 当前状态下选择的动作价值 */
     const currentQ = this.getQValue(state, [action])[action];
     /**下一步的动作价值  */
     const nextQValues = this.getQValue(nextState, nextValidMoves);
     const finiteQValues = nextQValues.filter((v) => !Number.isNaN(v));
-    const maxNextQ = Math.max(...finiteQValues);
+    const maxNextQ =
+      Math.max(...finiteQValues) === -Infinity ? 0 : Math.max(...finiteQValues);
 
     /** Q-Learning 更新公式
      *  - 公式: Q(s, a) = Q(s, a) + α * (r + γ * max(Q(s', a')) - Q(s, a))
@@ -100,16 +104,25 @@ export class QLearningAgent {
     const newQ =
       currentQ +
       LEARNING_RATE * (reward + DISCOUNT_FACTOR * maxNextQ - currentQ);
-    if (Number.isNaN(newQ)) {
-      console.log("⚠️⚠️start⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️");
 
-      console.log("currentQ:", currentQ);
-      console.log("LEARNING_RATE:", LEARNING_RATE);
-      console.log("reward:", reward);
-      console.log("DISCOUNT_FACTOR:", DISCOUNT_FACTOR);
-      console.log("maxNextQ:", maxNextQ);
-      console.log("currentQ:", currentQ);
-      console.log("⚠️⚠️end⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️");
+    /*
+    console.log("---------start---------------------");
+
+    console.log("state:", state);
+    console.log("action:", action);
+    console.log("reward:", reward);
+    console.log("nextState:", nextState);
+    console.log("nextValidMoves:", nextValidMoves);
+
+    console.log("currentQ==>", currentQ);
+    console.log("nextQValues==>", nextQValues);
+    console.log("finiteQValues==>", finiteQValues);
+    console.log("maxNextQ==>", maxNextQ);
+    console.log("newQ==>", newQ);
+    console.log("---------end---------------------");
+    */
+    if (Number.isNaN(newQ)) {
+      throw new Error("出错了!");
     }
     // 更新Q值
     this.qTable.get(state)![action] = newQ;
@@ -117,7 +130,22 @@ export class QLearningAgent {
 
   printQTable(): void {
     for (const [state, qValues] of this.qTable) {
-      console.log(state, qValues.toString());
+      if (
+        [
+          "❓❓❓❓❓❓❓❓❓",
+          "❌❓❓❓❓❓❓❓❓",
+          "❓❌❓❓❓❓❓❓❓",
+          "❓❓❌❓❓❓❓❓❓",
+          "❓❓❓❌❓❓❓❓❓",
+          "❓❓❓❓❌❓❓❓❓",
+          "❓❓❓❓❓❌❓❓❓",
+          "❓❓❓❓❓❓❌❓❓",
+          "❓❓❓❓❓❓❓❌❓",
+          "❓❓❓❓❓❓❓❓❌",
+        ].includes(state)
+      ) {
+        console.log(state, qValues.toString());
+      }
     }
   }
 }
