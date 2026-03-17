@@ -18,9 +18,12 @@ export class QLearningAgent {
   qTable: QTable;
   player: Player;
 
+  explorationRate: number;
+
   constructor(player: Player) {
     this.qTable = new Map();
     this.player = player;
+    this.explorationRate = EXPLORATION_RATE;
   }
 
   /** 获取当前状态对应的 Q 值数组 */
@@ -49,10 +52,8 @@ export class QLearningAgent {
     const qValues = this.getQValue(state, validMoves);
     if (showQValue) {
       console.log("AI thinking...");
-
-      console.log(state);
-      console.log(qValues);
-      console.log("AI thought...");
+      console.log("当前状态:", state);
+      console.log("Q值分布:", qValues);
     }
     if (validMoves.length === 0) {
       return -1;
@@ -89,13 +90,16 @@ export class QLearningAgent {
     nextState: string,
     nextValidMoves: number[],
   ): void {
-    /** 当前状态下选择的动作价值 */
-    const currentQ = this.getQValue(state, [action])[action];
-    /**下一步的动作价值  */
+    // 1. 获取当前状态-动作的Q值
+    const currentQValues = this.getQValue(state, [action]);
+    const currentQ = currentQValues[action];
+
+    // 2. 获取下一步状态的最大Q值（修复边界：空数组时设为0）
     const nextQValues = this.getQValue(nextState, nextValidMoves);
-    const finiteQValues = nextQValues.filter((v) => !Number.isNaN(v));
-    const maxNextQ =
-      Math.max(...finiteQValues) === -Infinity ? 0 : Math.max(...finiteQValues);
+    const finiteNextQ = nextQValues.filter(
+      (v) => !Number.isNaN(v) && v !== -Infinity,
+    );
+    const maxNextQ = finiteNextQ.length > 0 ? Math.max(...finiteNextQ) : 0;
 
     /** Q-Learning 更新公式
      *  - 公式: Q(s, a) = Q(s, a) + α * (r + γ * max(Q(s', a')) - Q(s, a))
@@ -105,27 +109,16 @@ export class QLearningAgent {
       currentQ +
       LEARNING_RATE * (reward + DISCOUNT_FACTOR * maxNextQ - currentQ);
 
-    /*
-    console.log("---------start---------------------");
-
-    console.log("state:", state);
-    console.log("action:", action);
-    console.log("reward:", reward);
-    console.log("nextState:", nextState);
-    console.log("nextValidMoves:", nextValidMoves);
-
-    console.log("currentQ==>", currentQ);
-    console.log("nextQValues==>", nextQValues);
-    console.log("finiteQValues==>", finiteQValues);
-    console.log("maxNextQ==>", maxNextQ);
-    console.log("newQ==>", newQ);
-    console.log("---------end---------------------");
-    */
-    if (Number.isNaN(newQ)) {
-      throw new Error("出错了!");
+    // 防御性检查：避免NaN
+    if (!Number.isFinite(newQ)) {
+      console.warn(
+        `无效Q值更新: state=${state}, action=${action}, newQ=${newQ}`,
+      );
+      return;
     }
     // 更新Q值
-    this.qTable.get(state)![action] = newQ;
+    currentQValues[action] = newQ;
+    this.qTable.set(state, currentQValues);
   }
 
   printQTable(): void {
