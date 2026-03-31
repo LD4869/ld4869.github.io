@@ -84,10 +84,15 @@ export class QLearningAgent {
    * @description 根据 Q-Learning 更新公式更新 Q 表
    */
   updateQTable(
+    /** 当前状态 */
     state: string,
+    /** 执行的动作 */
     action: number,
+    /** 奖励值 */
     reward: number,
+    /** 下一步状态 */
     nextState: string,
+    /** 下一步有效动作 */
     nextValidMoves: number[]
   ): void {
     // 1. 获取当前状态-动作的Q值
