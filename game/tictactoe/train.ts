@@ -3,7 +3,7 @@ import { QLearningAgent, TRAIN_EPISODES } from "./qagent.ts";
 import { Player } from "./types.ts";
 
 export function trainAgents(
-  trainCount?: number,
+  trainCount?: number
 ): [QLearningAgent, QLearningAgent] {
   const count = Number.isNaN(Number(trainCount))
     ? TRAIN_EPISODES
@@ -15,19 +15,7 @@ export function trainAgents(
 
   for (let i = 0; i < count; i++) {
     const game = new TicTacToe();
-    // /** X 的状态 */
-    // let xState = "";
-    // /** X 的下一步位置 */
-    // let xAction = -1;
-    // /** X 的下一步状态 */
-    // let xNextState = "";
-    // /** O 的状态 */
-    // let oState = "";
-    // /** O 的下一步位置 */
-    // let oAction = -1;
-    // /** O 的下一步状态 */
-    // let oNextState = "";
-
+    /** 游戏轨迹 */
     const gameTrajectory: Array<{
       state: string;
       action: number;
@@ -64,39 +52,7 @@ export function trainAgents(
       // 原来游戏执行动作(继续游戏)
       game.makeMove(action);
     }
-    /*
-    if (game.isGameOver()) {
-      const winner = game.checkWinner();
-      let xReward = 0;
-      let oReward = 0;
 
-      if (winner === Player.X) {
-        xReward = 10;
-        oReward = -10;
-      } else if (winner === Player.O) {
-        xReward = -10;
-        oReward = 10;
-      }
-
-      // 更新两个AI的学习记忆
-      agentX.updateQTable(
-        xState,
-        xAction,
-        xReward,
-        xNextState,
-        game.getValidMoves(),
-      );
-      if (oState && oAction !== -1) {
-        agentO.updateQTable(
-          oState,
-          oAction,
-          oReward,
-          oNextState,
-          game.getValidMoves(),
-        );
-      }
-    }
-*/
     const winner = game.checkWinner();
     const xReward = winner === Player.X ? 10 : winner === Player.O ? -10 : 0;
     const oReward = winner === Player.O ? 10 : winner === Player.X ? -10 : 0;
@@ -106,7 +62,7 @@ export function trainAgents(
       const { state, action, player, nextState } = step;
       const nextGame = new TicTacToe();
       nextGame.board = nextState.split("").map((c) => {
-        if (c === "❓") {
+        if (c === "?") {
           return null;
         }
         return c as Player;
@@ -120,8 +76,8 @@ export function trainAgents(
       }
     }
 
-    if ((i + 1) % 10000 === 0) {
-      console.log(`✅ 已训练${i + 1}局`);
+    if ((10 * (i + 1)) % count === 0) {
+      console.log(`✅ 已训练 ${((i + 1) / count) * 100}% `);
     }
   }
   console.log("🎉 训练完成!");

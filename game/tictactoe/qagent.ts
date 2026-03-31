@@ -88,7 +88,7 @@ export class QLearningAgent {
     action: number,
     reward: number,
     nextState: string,
-    nextValidMoves: number[],
+    nextValidMoves: number[]
   ): void {
     // 1. 获取当前状态-动作的Q值
     const currentQValues = this.getQValue(state, [action]);
@@ -97,7 +97,7 @@ export class QLearningAgent {
     // 2. 获取下一步状态的最大Q值（修复边界：空数组时设为0）
     const nextQValues = this.getQValue(nextState, nextValidMoves);
     const finiteNextQ = nextQValues.filter(
-      (v) => !Number.isNaN(v) && v !== -Infinity,
+      (v) => !Number.isNaN(v) && v !== -Infinity
     );
     const maxNextQ = finiteNextQ.length > 0 ? Math.max(...finiteNextQ) : 0;
 
@@ -112,7 +112,7 @@ export class QLearningAgent {
     // 防御性检查：避免NaN
     if (!Number.isFinite(newQ)) {
       console.warn(
-        `无效Q值更新: state=${state}, action=${action}, newQ=${newQ}`,
+        `无效Q值更新: state=${state}, action=${action}, newQ=${newQ}`
       );
       return;
     }
@@ -125,16 +125,16 @@ export class QLearningAgent {
     for (const [state, qValues] of this.qTable) {
       if (
         [
-          "❓❓❓❓❓❓❓❓❓",
-          "❌❓❓❓❓❓❓❓❓",
-          "❓❌❓❓❓❓❓❓❓",
-          "❓❓❌❓❓❓❓❓❓",
-          "❓❓❓❌❓❓❓❓❓",
-          "❓❓❓❓❌❓❓❓❓",
-          "❓❓❓❓❓❌❓❓❓",
-          "❓❓❓❓❓❓❌❓❓",
-          "❓❓❓❓❓❓❓❌❓",
-          "❓❓❓❓❓❓❓❓❌",
+          "?????????",
+          "X????????",
+          "?X???????",
+          "??X??????",
+          "???X?????",
+          "????X????",
+          "?????X???",
+          "??????X??",
+          "???????X?",
+          "????????X",
         ].includes(state)
       ) {
         console.log(state, qValues.toString());

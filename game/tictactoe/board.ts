@@ -76,26 +76,14 @@ export class TicTacToe {
    * 用于 Q 表的状态表示
    */
   getStateKey(): string {
-    return this.board.map((cell) => cell || "❓").join("");
+    return this.board.map((cell) => cell || "?").join("");
   }
 
   printBoard(): void {
-    const splitLine = "+----+----+----+";
     console.log(`当前玩家: ${this.currentPlayer}`);
-
-    console.log(splitLine);
-
     for (let idx = 0; idx < 9; idx += 3) {
       const row = this.board.slice(idx, idx + 3);
-      console.log(
-        "|",
-        row.map((cell, i) => cell || `${i + idx} `).join(" | "),
-        "|",
-      );
-      if (idx < 6) {
-        console.log(splitLine);
-      }
+      console.log(row.map((cell, i) => cell || `${i + idx}`).join(" "));
     }
-    console.log(splitLine);
   }
 }
