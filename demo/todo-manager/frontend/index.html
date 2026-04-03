@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>待办事项管理器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📝 待办事项管理器</h1>
+      <p class="subtitle">一个简单的任务管理 Demo</p>
+    </header>
+
+    <main>
+      <!-- 统计信息 -->
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-label">总任务数</span>
+          <span class="stat-value" id="totalCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">已完成</span>
+          <span class="stat-value completed" id="completedCount">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">进行中</span>
+          <span class="stat-value pending" id="pendingCount">0</span>
+        </div>
+      </div>
+
+      <!-- 输入框 -->
+      <div class="input-group">
+        <input
+          type="text"
+          id="todoInput"
+          class="todo-input"
+          placeholder="添加新任务... (按 Enter 确认)"
+          autocomplete="off"
+        />
+        <button id="addBtn" class="btn btn-primary">添加</button>
+      </div>
+
+      <!-- 任务列表 -->
+      <div class="todo-list" id="todoList">
+        <div class="empty-state">
+          <p>📭 暂无任务</p>
+          <p class="hint">添加一个新任务开始吧</p>
+        </div>
+      </div>
+
+      <!-- 调试信息 -->
+      <div class="debug-info">
+        <p id="status">连接到服务器...</p>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="app.ts"></script>
+</body>
+</html>
