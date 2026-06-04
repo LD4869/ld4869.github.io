@@ -26,6 +26,54 @@ export class QLearningAgent {
     this.explorationRate = EXPLORATION_RATE;
   }
 
+  /**
+   * 保存 Q 表到文件
+   */
+  saveQTable(filename?: string): void {
+    const data = {
+      qTable: Array.from(this.qTable.entries()),
+      player: this.player,
+      timestamp: new Date().toISOString(),
+      explorationRate: this.explorationRate,
+    };
+
+    // 使用固定文件名，始终覆盖最新的模型
+    const saveFilename = filename || "qagent_data_latest.json";
+    Deno.writeTextFileSync(saveFilename, JSON.stringify(data, null, 2));
+    console.log(`💾 已保存 Q 表到 ${saveFilename}`);
+  }
+
+  /**
+   * 从文件加载 Q 表
+   */
+  loadQTable(filename: string): void {
+    try {
+      const data = JSON.parse(Deno.readTextFileSync(filename));
+      this.qTable = new Map(data.qTable);
+      this.player = data.player;
+      this.explorationRate = data.explorationRate || EXPLORATION_RATE;
+      console.log(`📂 已加载 Q 表: ${filename}`);
+    } catch (error) {
+      console.error(`❌ 加载 Q 表失败:`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * 获取最新的 Q 表文件
+   */
+  static loadLatest(): QLearningAgent | null {
+    try {
+      // 直接尝试加载固定文件名的最新模型
+      const agent = new QLearningAgent(Player.X);
+      agent.loadQTable("qagent_data_latest.json");
+      return agent;
+    } catch (e) {
+      // 如果没有找到最新模型，返回 null
+      return null;
+    }
+  }
+
   /** 获取当前状态对应的 Q 值数组 */
   private getQValue(state: string, validMoves: number[]): number[] {
     if (!this.qTable.has(state)) {
@@ -93,7 +141,7 @@ export class QLearningAgent {
     /** 下一步状态 */
     nextState: string,
     /** 下一步有效动作 */
-    nextValidMoves: number[]
+    nextValidMoves: number[],
   ): void {
     // 1. 获取当前状态-动作的Q值
     const currentQValues = this.getQValue(state, [action]);
@@ -102,7 +150,7 @@ export class QLearningAgent {
     // 2. 获取下一步状态的最大Q值（修复边界：空数组时设为0）
     const nextQValues = this.getQValue(nextState, nextValidMoves);
     const finiteNextQ = nextQValues.filter(
-      (v) => !Number.isNaN(v) && v !== -Infinity
+      (v) => !Number.isNaN(v) && v !== -Infinity,
     );
     const maxNextQ = finiteNextQ.length > 0 ? Math.max(...finiteNextQ) : 0;
 
@@ -116,9 +164,6 @@ export class QLearningAgent {
 
     // 防御性检查：避免NaN
     if (!Number.isFinite(newQ)) {
-      console.warn(
-        `无效Q值更新: state=${state}, action=${action}, newQ=${newQ}`
-      );
       return;
     }
     // 更新Q值
