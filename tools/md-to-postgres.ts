@@ -1,3 +1,5 @@
+import { assertEquals } from "https://deno.land/std@0.208.0/assert/assert_equals.ts";
+
 /**
  * 计算字符串中指定字符出现的次数
  *
@@ -115,13 +117,45 @@ export function md2obj(mdValue: string): Array<Record<string, string>> {
   return result;
 }
 
+/**
+ * 将驼峰命名或连字符命名转换为蛇形命名（SQL字段格式）
+ * 例如: columnName => column_name; my_columnName => my_column_name; my-column_name => my_column_name
+ *
+ * @param str 驼峰命名或连字符命名的字符串
+ * @returns 蛇形命名的字符串
+ */
+export function camelToSnake(str: string): string {
+  // 1. 将连字符替换为下划线
+  let result = str.replace(/-/g, "_");
+
+  // 2. 处理全大写的情况（如 ID => id, TEST_NAME => test_name）
+  if (result === result.toUpperCase()) {
+    return result.toLowerCase();
+  }
+
+  // 3. 在大写字母前添加下划线（除非是字符串开头或前面已经是下划线）
+  result = result.replace(/([^_])([A-Z])/g, "$1_$2");
+
+  // 4. 将所有字符转换为小写
+  result = result.toLowerCase();
+
+  // 5. 移除连续的下划线（如果有多个连续的下划线）
+  result = result.replace(/_+/g, "_");
+
+  // 6. 移除开头和结尾的下划线
+  result = result.replace(/^_|_$/g, "");
+
+  return result;
+}
+
 export function obj2sql(obj: Record<string, string>) {
   const hasFieldName = "字段名称" in obj;
   if (!hasFieldName) {
     throw new Error("没有字段名称");
   }
-  const sql = `${obj["字段名称"]}`;
-  return sql;
+  const fieldName = obj["字段名称"];
+  const snakeFieldName = camelToSnake(fieldName);
+  return snakeFieldName;
 }
 
 Deno.test("test-md2obj-ok", () => {
