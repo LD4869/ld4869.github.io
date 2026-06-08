@@ -146,14 +146,36 @@ export function camelToSnake(str: string): string {
   return result;
 }
 
-export function obj2sql(obj: Record<string, string>) {
-  const hasFieldName = "字段名称" in obj;
+function getFieldFromObj(fieldName: string, obj: Record<string, string>) {
+  const hasFieldName = fieldName in obj;
   if (!hasFieldName) {
-    throw new Error("没有字段名称");
+    throw new Error("没有" + fieldName);
   }
-  const fieldName = obj["字段名称"];
+  return obj[fieldName];
+}
+export function obj2sql(obj: Record<string, string>) {
+  const fieldName = getFieldFromObj("字段名称", obj);
   const snakeFieldName = camelToSnake(fieldName);
-  return snakeFieldName;
+
+  const fieldType = getFieldFromObj("字段类型", obj);
+  const upperFieldType = fieldType.toUpperCase();
+
+  const allowNull = getFieldFromObj("是否必填", obj);
+  const upperNotNull = allowNull === "否" ? "NOT NULL" : "";
+
+  const unique = getFieldFromObj("是否唯一", obj);
+  const upperUnique = unique === "是" ? "UNIQUE" : "";
+
+  return `${snakeFieldName} ${upperFieldType} ${upperNotNull} ${upperUnique}`;
+}
+
+function main(mdValue: string) {
+  const obj = md2obj(mdValue);
+  let sqlString = ``;
+  for (const o of obj) {
+    sqlString += `${obj2sql(o)},\n`;
+  }
+  console.log(sqlString);
 }
 
 Deno.test("test-md2obj-ok", () => {
@@ -177,4 +199,15 @@ Deno.test("test-obj2sql-ok", () => {
       备注: "手机号码",
     }),
   );
+});
+
+Deno.test("test-main", () => {
+  const mdValue = `
+  |字段名称|字段类型|是否必填|是否唯一|备注|
+  |--------|--------|--------|--------|----|
+  | id     | serial | 是     | 是     | |
+  | name | text| 是| 否| 姓名|
+  |phoneNumber|text|否|否|手机号码|
+  `;
+  main(mdValue);
 });
