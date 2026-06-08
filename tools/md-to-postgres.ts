@@ -167,9 +167,9 @@ export function obj2sql(obj: Record<string, string>) {
   const upperUnique = unique === "是" ? "UNIQUE" : "";
 
   const sql = `  ${snakeFieldName} ${upperFieldType.trim()} ${upperNotNull.trim()} ${upperUnique.trim()}`;
-  // 确保没有连续多个空格
-  const normalizedSql = sql.replace(/\s+/g, ' ');
-  return normalizedSql;
+  // 确保没有连续多个空格，但保留开头的两个空格
+  const normalizedSql = sql.replace(/^\s{2}/, '').replace(/\s+/g, ' ');
+  return `  ${normalizedSql.trim()}`;
 }
 
 function main(mdValue: string) {
