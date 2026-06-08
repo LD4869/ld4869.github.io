@@ -166,14 +166,18 @@ export function obj2sql(obj: Record<string, string>) {
   const unique = getFieldFromObj("是否唯一", obj);
   const upperUnique = unique === "是" ? "UNIQUE" : "";
 
-  return `${snakeFieldName} ${upperFieldType} ${upperNotNull} ${upperUnique}`;
+  const sql = `  ${snakeFieldName} ${upperFieldType.trim()} ${upperNotNull.trim()} ${upperUnique.trim()}`;
+  // 确保没有连续多个空格
+  const normalizedSql = sql.replace(/\s+/g, ' ');
+  return normalizedSql;
 }
 
 function main(mdValue: string) {
   const obj = md2obj(mdValue);
   let sqlString = ``;
   for (const o of obj) {
-    sqlString += `${obj2sql(o)},\n`;
+    const sql = obj2sql(o);
+    sqlString += `${sql},\n`;
   }
   console.log(sqlString);
 }
@@ -199,6 +203,7 @@ Deno.test("test-obj2sql-ok", () => {
       备注: "手机号码",
     }),
   );
+  // 预期输出: "  phone_number text not null unique"
 });
 
 Deno.test("test-main", () => {
