@@ -1,3 +1,6 @@
+function formetedField(field: string) {
+  return `"${field}"`;
+}
 /**
  * 计算字符串中指定字符出现的次数
  *
@@ -154,7 +157,7 @@ function getFieldFromObj(fieldName: string, obj: Record<string, string>) {
   return obj[fieldName];
 }
 export function obj2sql(obj: Record<string, string>) {
-  const fieldName = getFieldFromObj("字段名称", obj);
+  const fieldName = formetedField(getFieldFromObj("字段名称", obj));
   const snakeFieldName = camelToSnake(fieldName);
 
   const fieldType = getFieldFromObj("字段类型", obj);
@@ -168,18 +171,31 @@ export function obj2sql(obj: Record<string, string>) {
 
   const sql = `  ${snakeFieldName} ${upperFieldType.trim()} ${upperNotNull.trim()} ${upperUnique.trim()}`;
   // 确保没有连续多个空格，但保留开头的两个空格
-  const normalizedSql = sql.replace(/^\s{2}/, '').replace(/\s+/g, ' ');
+  const normalizedSql = sql.replace(/^\s{2}/, "").replace(/\s+/g, " ");
   return `  ${normalizedSql.trim()}`;
 }
 
-function main(mdValue: string) {
+function main(mdValue: string, tableName: string) {
   const obj = md2obj(mdValue);
-  let sqlString = ``;
-  for (const o of obj) {
-    const sql = obj2sql(o);
-    sqlString += `${sql},\n`;
+  let fieldDDLString = ``;
+
+  // 构建 field 部分
+  for (let i = 0; i < obj.length; i++) {
+    const sql = obj2sql(obj[i]);
+    if (i === obj.length - 1) {
+      fieldDDLString += `${sql}`;
+    } else {
+      fieldDDLString += `${sql},\n`;
+    }
   }
-  console.log(sqlString);
+
+  // 构建完整SQL
+  const sql = `
+CREATE TABLE(${formetedField(tableName)}){
+${fieldDDLString}
+};
+  `;
+  console.log(sql);
 }
 
 Deno.test("test-md2obj-ok", () => {
@@ -214,5 +230,5 @@ Deno.test("test-main", () => {
   | name | text| 是| 否| 姓名|
   |phoneNumber|text|否|否|手机号码|
   `;
-  main(mdValue);
+  main(mdValue, "z1_user");
 });
