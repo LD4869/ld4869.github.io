@@ -70,7 +70,7 @@ function countChar(str: string, char: string) {
  * ```
  */
 export function md2obj(mdValue: string): Array<Record<string, string>> {
-  const headers = "|字段名称|字段类型|是否必填|是否唯一|备注|";
+  const headers = "|字段名称|字段类型|是否必填|是否唯一|备注|默认值|";
 
   const splitedHeaders = headers.split("|").slice(1, -1);
   console.log(splitedHeaders);
@@ -96,7 +96,7 @@ export function md2obj(mdValue: string): Array<Record<string, string>> {
     })
     // 过滤空行
     .filter(Boolean);
-
+  console.log(mdArr);
   if (mdArr.length <= 2) {
     throw new Error("数据不足");
   }
@@ -156,9 +156,10 @@ function getFieldFromObj(fieldName: string, obj: Record<string, string>) {
   }
   return obj[fieldName];
 }
-export function obj2sql(obj: Record<string, string>) {
-  const fieldName = formetedField(getFieldFromObj("字段名称", obj));
-  const snakeFieldName = camelToSnake(fieldName);
+export function obj2sql(obj: Record<string, string>, tableName: string) {
+  const snakeFieldName = formetedField(
+    camelToSnake(getFieldFromObj("字段名称", obj)),
+  );
 
   const fieldType = getFieldFromObj("字段类型", obj);
   const upperFieldType = fieldType.toUpperCase();
@@ -172,63 +173,56 @@ export function obj2sql(obj: Record<string, string>) {
   const sql = `  ${snakeFieldName} ${upperFieldType.trim()} ${upperNotNull.trim()} ${upperUnique.trim()}`;
   // 确保没有连续多个空格，但保留开头的两个空格
   const normalizedSql = sql.replace(/^\s{2}/, "").replace(/\s+/g, " ");
-  return `  ${normalizedSql.trim()}`;
+
+  return {
+    field: `  ${normalizedSql.trim()}`,
+    comment: `COMMENT ON COLUMN ${formetedField(tableName)}.${snakeFieldName} is '字段备注';`,
+  };
 }
 
-function main(mdValue: string, tableName: string) {
+function main(mdValue: string, tableName: string, tableComment: string) {
   const obj = md2obj(mdValue);
+  const startString = `-- ${tableComment} START`;
+  const endString = `-- ${tableComment} END`;
   let fieldDDLString = ``;
+  let commentSQLString = `COMMENT ON TABLE "${tableName}" IS '${tableComment}'`;
 
   // 构建 field 部分
   for (let i = 0; i < obj.length; i++) {
-    const sql = obj2sql(obj[i]);
+    const { field, comment } = obj2sql(obj[i], tableName);
     if (i === obj.length - 1) {
-      fieldDDLString += `${sql}`;
+      fieldDDLString += `${field}`;
     } else {
-      fieldDDLString += `${sql},\n`;
+      fieldDDLString += `${field},\n`;
     }
+    commentSQLString += `\n${comment}`;
   }
 
   // 构建完整SQL
   const sql = `
+${startString}
 CREATE TABLE(${formetedField(tableName)}){
 ${fieldDDLString}
 };
+${commentSQLString}
+${endString}
   `;
   console.log(sql);
 }
 
-Deno.test("test-md2obj-ok", () => {
-  const mdValue = `
-  |字段名称|字段类型|是否必填|是否唯一|备注|
-  |--------|--------|--------|--------|----|
-  | id     | serial | 是     | 是     | |
-  | name | text| 是| 否| 姓名|
-  |phoneNumber|text|否|否|手机号码|
-  `;
-  console.log(md2obj(mdValue));
-});
-
-Deno.test("test-obj2sql-ok", () => {
-  console.log(
-    obj2sql({
-      字段名称: "phoneNumber",
-      字段类型: "text",
-      是否必填: "否",
-      是否唯一: "否",
-      备注: "手机号码",
-    }),
-  );
-  // 预期输出: "  phone_number text not null unique"
-});
-
 Deno.test("test-main", () => {
+  /**
+   * 格式:
+   *   |字段名称|字段类型|是否必填|是否唯一|备注|默认值|
+   *   |--------|--------|--------|--------|----|------|
+   *   |        |        |        |        |    |      |
+   */
   const mdValue = `
-  |字段名称|字段类型|是否必填|是否唯一|备注|
-  |--------|--------|--------|--------|----|
-  | id     | serial | 是     | 是     | |
-  | name | text| 是| 否| 姓名|
-  |phoneNumber|text|否|否|手机号码|
+  |字段名称|字段类型|是否必填|是否唯一|备注|默认值|
+  |--------|--------|--------|--------|----|------|
+  | id     | serial | 是     | 是     | | |
+  | name | text| 是| 否| 姓名|无名|
+  |phoneNumber|text|否|否|手机号码|13300001111|
   `;
-  main(mdValue, "z1_user");
+  main(mdValue, "z1_user", "用户表");
 });
