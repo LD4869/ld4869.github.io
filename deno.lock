@@ -2,9 +2,11 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/assert@^1.0.13": "1.0.13",
+    "jsr:@std/bytes@^1.0.6": "1.0.6",
     "jsr:@std/csv@^1.0.6": "1.0.6",
     "jsr:@std/internal@^1.0.6": "1.0.8",
-    "jsr:@std/streams@^1.0.9": "1.0.10"
+    "jsr:@std/streams@^1.0.9": "1.0.10",
+    "npm:@colbymchenry/codegraph@^1.0.1": "1.0.1"
   },
   "jsr": {
     "@std/assert@1.0.13": {
@@ -12,6 +14,9 @@
       "dependencies": [
         "jsr:@std/internal"
       ]
+    },
+    "@std/bytes@1.0.6": {
+      "integrity": "f6ac6adbd8ccd99314045f5703e23af0a68d7f7e58364b47d2c7f408aeb5820a"
     },
     "@std/csv@1.0.6": {
       "integrity": "52ef0e62799a0028d278fa04762f17f9bd263fad9a8e7f98c14fbd371d62d9fd",
@@ -23,7 +28,54 @@
       "integrity": "fc66e846d8d38a47cffd274d80d2ca3f0de71040f855783724bb6b87f60891f5"
     },
     "@std/streams@1.0.10": {
-      "integrity": "75c0b1431873cd0d8b3d679015220204d36d3c7420d93b60acfc379eb0dc30af"
+      "integrity": "75c0b1431873cd0d8b3d679015220204d36d3c7420d93b60acfc379eb0dc30af",
+      "dependencies": [
+        "jsr:@std/bytes"
+      ]
+    }
+  },
+  "npm": {
+    "@colbymchenry/codegraph-darwin-arm64@1.0.1": {
+      "integrity": "sha512-4z3aNzR3Ml31MBVzAvFQm+bk83erdHkjnaJ0PoeM6I9T7xuTIcdAGV36i3qYwgBE4tdrghRdR0mP5MNM+OrGFA==",
+      "os": ["darwin"],
+      "cpu": ["arm64"]
+    },
+    "@colbymchenry/codegraph-darwin-x64@1.0.1": {
+      "integrity": "sha512-KBSKl+tLCSIgV4iyi21SqYlpXL0P8DPqAnVHvvStdyYsCmkc2Heqf4oQIko+TYyFmuo65m4VpX989JkYZVGIVQ==",
+      "os": ["darwin"],
+      "cpu": ["x64"]
+    },
+    "@colbymchenry/codegraph-linux-arm64@1.0.1": {
+      "integrity": "sha512-2TOeL/Lx3kME+dmv2Q9hbIQFBvT6uKLdZONDRaYto+1Bcl3GrJuIu6bsu3jiJuifPhnYIL2xwUV6y+TZQ8MbTw==",
+      "os": ["linux"],
+      "cpu": ["arm64"]
+    },
+    "@colbymchenry/codegraph-linux-x64@1.0.1": {
+      "integrity": "sha512-UENXSURJJUhcvdKoYsB5Wj6Z6O9C2afhYfG0LnL13KFWJhGXugqYKjF4KwkaeE8Po8TFul9k3f+8eXjmJwwwaQ==",
+      "os": ["linux"],
+      "cpu": ["x64"]
+    },
+    "@colbymchenry/codegraph-win32-arm64@1.0.1": {
+      "integrity": "sha512-ZEG+HOakHiAe1AWMa2LgD52HyIEbWsY2FyNvDmon4Ss2889OghqUyA8BOLu5hNW+EI42JwwSXijVevn2Zn0hlg==",
+      "os": ["win32"],
+      "cpu": ["arm64"]
+    },
+    "@colbymchenry/codegraph-win32-x64@1.0.1": {
+      "integrity": "sha512-qU6jjyma635qKJ0aaL8XU8QtYUGkWly0Mu4Wm2cSWRcNDL1v6sVoHMElgfUY7E9tK0gnU+/LbZW3MfmtqLG1GA==",
+      "os": ["win32"],
+      "cpu": ["x64"]
+    },
+    "@colbymchenry/codegraph@1.0.1": {
+      "integrity": "sha512-Y4ZMk7wxSRI9g2wQTcW21TfLr+fw7td1Dadkll6Udl9Ll8wX3H6qtov7K/VGtHG2AFX2j1e5Lm48PTHi74mImg==",
+      "optionalDependencies": [
+        "@colbymchenry/codegraph-darwin-arm64",
+        "@colbymchenry/codegraph-darwin-x64",
+        "@colbymchenry/codegraph-linux-arm64",
+        "@colbymchenry/codegraph-linux-x64",
+        "@colbymchenry/codegraph-win32-arm64",
+        "@colbymchenry/codegraph-win32-x64"
+      ],
+      "bin": true
     }
   },
   "remote": {
@@ -192,7 +244,14 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.13",
-      "jsr:@std/csv@^1.0.6"
-    ]
+      "jsr:@std/csv@^1.0.6",
+      "npm:@colbymchenry/codegraph-darwin-arm64@^1.0.1",
+      "npm:@colbymchenry/codegraph@^1.0.1"
+    ],
+    "packageJson": {
+      "dependencies": [
+        "npm:@colbymchenry/codegraph@^1.0.1"
+      ]
+    }
   }
 }

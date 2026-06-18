@@ -11,3 +11,6 @@ node_modules/
 .idea/
 # 仅保留dist（编译产物），过滤src编译中间文件（可选）
 # src/*.js
+
+.env
+.codegraph/
