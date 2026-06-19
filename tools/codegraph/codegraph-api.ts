@@ -1,6 +1,4 @@
-import pkg from "@colbymchenry/codegraph";
-import { IndexProgress } from "@colbymchenry/codegraph";
-const { CodeGraph } = pkg;
+import { CodeGraph, IndexProgress } from "@colbymchenry/codegraph";
 
 /**
  * 初始化项目 `codegraph init`
@@ -36,16 +34,23 @@ async function indexAll(cg: CodeGraph) {
   });
 }
 
-async function search(cg: CodeGraph) {
-  return cg.searchNodes("data");
+/**
+ * 搜索
+ * @param cg
+ * @param context
+ * @returns
+ */
+async function search(cg: CodeGraph, context: string) {
+  return await cg.searchNodes(context);
 }
 
 Deno.test("test-indexAll-success", async () => {
-  const cg = await initCodeGraph();
+  const path = "/Users/phd/Documents/GitHub/z1";
+  const cg = await initCodeGraph(path);
 
-  await indexAll(cg);
-  const res = await search(cg);
-  console.log(res)
+  // await indexAll(cg);
+  const res = await search(cg, "Data");
+  console.log(res.length);
 });
 
 // const results = cg.searchNodes("UserService");

@@ -6,6 +6,7 @@
     "jsr:@std/csv@^1.0.6": "1.0.6",
     "jsr:@std/internal@^1.0.6": "1.0.8",
     "jsr:@std/streams@^1.0.9": "1.0.10",
+    "npm:@colbymchenry/codegraph-darwin-arm64@^1.0.1": "1.0.1",
     "npm:@colbymchenry/codegraph@^1.0.1": "1.0.1"
   },
   "jsr": {

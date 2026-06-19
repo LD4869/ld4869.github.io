@@ -6,6 +6,6 @@
   // 启用测试代码透镜
   "deno.codeLens.test": true,
   // 其他 Deno 配置（可选）
-  "deno.config": "deno.json", // 如果你有 deno.json 配置文件
+  "deno.config": "deno.jsonc", // 如果你有 deno.json 配置文件
   "editor.formatOnSave": true
 }
